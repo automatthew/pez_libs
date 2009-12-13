@@ -4,6 +4,7 @@ http://github.com/pete/pez
 
 ok.pez: Something approximating unit testing.  Usage
 
+<pre>
   "Name of test suite" tests:
   
   "this thing should do that"
@@ -13,6 +14,8 @@ ok.pez: Something approximating unit testing.  Usage
   "that thing should not do this"
   blah blah blah
   endt
+</pre>
+
 
 errcount
 
