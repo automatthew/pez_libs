@@ -4,15 +4,15 @@ http://github.com/pete/pez
 
 ok.pez: Something approximating unit testing.  Usage
 
-"Name of test suite" tests:
-
-"this thing should do that"
-blah blah blah
-endt
-
-"that thing should not do this"
-blah blah blah
-endt
+  "Name of test suite" tests:
+  
+  "this thing should do that"
+  blah blah blah
+  endt
+  
+  "that thing should not do this"
+  blah blah blah
+  endt
 
 errcount
 
