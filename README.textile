@@ -2,7 +2,11 @@ Provisional place to store and develop libraries for Pez.
 
 http://github.com/pete/pez
 
-ok.pez: Something approximating unit testing.  Usage
+h2. ok.pez
+
+h3. Something approximating unit testing.
+
+Usage:
 
 <pre>
   "Name of test suite" tests:
