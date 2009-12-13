@@ -1,0 +1,130 @@
+132 string estring
+132 string checking
+variable errors
+
+# TODO:  This is somewhat common for portability reasons; maybe make it a
+# primitive.
+: floatcells ( -- float:cell-ratio )
+	float-size cell-size / 
+;
+
+#  TESTS:  --  Declare current word under tests
+
+: tests:
+        dup checking s! print ." ":\n"
+;
+
+#  OOPS!  --  Increment errors encountered
+
+: oops!
+        1 errors +!
+;
+
+
+: print_ok ( test_name -- )
+	." "+ " puts ;
+
+: print_fail ( depth reason test_name -- )
+	." "- "
+	swap puts print
+	1 - n.s
+	." "\n"
+	
+;
+
+: endt ( test_name -- )
+    depth dup 1 >  if
+		dup 
+		pick
+		"\tDebris left on stack:  "
+		print_fail
+		oops!
+		clear
+	else
+	drop print_ok
+    then
+;
+
+#  NOK?  --  Validate a number of stack results
+
+variable nsi
+
+# TODO make the failure output take the current number base into account
+
+: nok?                                ( rcv0 ... rcvn
+                                        exp0 ... expn n -- )
+    dup nsi !
+    0 do
+        i pick i nsi @ + 1+ pick
+        2dup <> if
+            swap
+            ." "Error in '" checking print ." "'"
+                nsi @ 1 <> if
+                    i " item %ld" estring strform estring print
+                then
+                ." ": expected " "%ld" estring strform estring print
+                ." ", received " "%ld.\n" estring strform estring print
+            oops!
+        else
+            2drop
+        then
+    loop
+    nsi @ 2* 0 do
+        drop
+    loop
+;
+
+#  OK?  --  Validate a single stack result
+
+: ok?
+    1 nok?
+;
+
+#   FOK?  --  Validate a floating point stack result
+
+: fok?                                ( frcv fexp --  )
+    fover fover f- fabs 1.0e-10 f> if
+        ." "Error in " checking print
+            ." ": expected " "%g" estring fstrform estring print
+            ." ", received " "%g.\n" estring fstrform estring print
+        oops!
+    else
+        fdrop fdrop
+    then
+;
+
+#   SOK?  --  Validate a string stack result.  This tests for
+#             string equality, not identity of the pointers to
+#             the string.  If you want to test identity, you can
+#             use OK?
+
+: sok?                                ( srcv sexp --  )
+    2dup strcmp 0<> if
+        ." "Error in " checking print
+            ." ":\n    Expected " puts
+            ." "    Received " puts
+        oops!
+    else
+        2drop
+    then
+;
+
+: errcount
+	errors @ if
+		2 >output
+		errors @ 1 = if
+			"1 error.\n" puts cr
+		else
+			errors ? ." "errors." cr
+		then
+	else
+		1 >output
+		"\nNo errors." puts
+	then
+;
+
+
+: is_true -1 ok? ;
+: is_false 0 ok? ;
+: assert_eq ok? ;
+: assert_seq sok? ;
